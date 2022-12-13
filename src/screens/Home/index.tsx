@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Alert, FlatList, GestureResponderEvent, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { ListEmpty } from "../../components/ListEmpty";
 import { TaskProps, Task } from "../../components/Task";
 import { TaskCompleted } from "../../components/TaskCompleted";
@@ -8,17 +8,15 @@ import { styles } from "./styles";
 export function Home(){
     const [Tasks, setTask] = useState<TaskProps[]>([])
     const [TasksCompleted, setTasksCompleted] = useState<TaskProps[]>([])
-    const [AllTasks, setAllTasks] = useState<TaskProps[]>([])
     const [TaskText, setTaskText] = useState('')
 
-    function AddTask(e: GestureResponderEvent){
+    function AddTask(){
         const newTask = {
             task: TaskText,
             id: TaskText + Tasks.length
         }
 
         setTask((state) => [...state, newTask])
-        setAllTasks((state) => [...state, newTask])
         setTaskText('')
     }
 
@@ -66,10 +64,6 @@ export function Home(){
         })
 
         setTask(newTaskList)
-    }
-
-    function UncompleteTask(id: string){
-        
     }
 
     return(
@@ -123,8 +117,8 @@ export function Home(){
             {Tasks.length === 0 && TasksCompleted.length === 0 && (
                 <ListEmpty />
             )}
-
-            {/* {Tasks.length > 0 && (
+            
+            {Tasks.length > 0 && (
                 <FlatList
                     data={Tasks}
                     keyExtractor={item => item.id}
@@ -138,26 +132,10 @@ export function Home(){
                         />
                     )}
                 />
-            )} */}
-
-            
-            {AllTasks.length > 0 && (
-                <FlatList
-                    data={AllTasks}
-                    keyExtractor={item => item.id}
-                    renderItem={({ item }) => (
-                        <Task 
-                            key={item.id} 
-                            id={item.id}
-                            task={item.task} 
-                            onRemove={() => RemoveTask(item.id)}
-                            CompleteTask={() => CompleteTask(item.id)}
-                        />
-                    )}
-                />
             )}
 
-            {/* {TasksCompleted.length > 0 && (
+            
+            {TasksCompleted.length > 0 && (
                 <FlatList
                     data={TasksCompleted}
                     keyExtractor={item => item.id}
@@ -166,12 +144,11 @@ export function Home(){
                             key={item.id} 
                             id={item.id}
                             task={item.task} 
-                            UncompleteTask={() => UncompleteTask(item.id)}
                             RemoveCompletedTask={() => RemoveCompletedTask(item.id)}
                         />
                     )}
                 />
-            )} */}
+            )}
 
         </View>
     )
